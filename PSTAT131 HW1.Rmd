@@ -1,0 +1,149 @@
+---
+title: "HW1"
+author: "Yuanning Li, 6665764"
+date: "2022-10-03"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Machine Learning Main Ideas
+
+## Question 1:
+Define supervised and unsupervised learning. What are the difference(s) between them?
+
+Definition(Supervised Learning):
+Supervised learning (SL) is the machine learning task of learning a function that maps an input to an output based on example input-output pairs. It infers a function from labeled training data consisting of a set of training examples.
+
+Definition(Unsupervised Learning):
+Unsupervised learning is a type of algorithm that learns patterns from untagged data.
+
+Differences:
+SL defines labels when training data pairs, which Unsupervised learning does not contain lables while training data.
+
+## Question 2:
+Explain the difference between a regression model and a classification model, specifically in the context of machine learning.
+
+Given a feature vector, Regression model predict continuous numbers(real number) while Classification model predicts discrete number(Category labels).
+
+## Question 3:
+Name two commonly used metrics for regression ML problems. Name two commonly used metrics for classification ML problems.
+
+three error metrics that are commonly used for evaluating and reporting the performance of a regression model:
+Mean Squared Error(MSE)
+Root Mean Squared Error (MAE)
+
+Five performance metrics that are commonly used for Classification model are:
+Accuracy
+Confusion Matrix
+Precision, Recall, and F1 score
+ROC AUC
+Log-loss
+
+## Question 4:
+As discussed, statistical models can be used for different purposes. These purposes can generally be classified into the following three categories. Provide a brief description of each.
+
+Descriptive models: A descriptive model describes a system or other entity and its relationship to its environment. It is generally used to help specify and/or understand what the system is, what it does, and how it does it.
+
+Inferential models: Inferential model aim to test theories about causal claims and state relationship between outcome & predictor(s).
+
+Predictive models: Predictive models are statistical technique to predict and forecast likely future outcomes with the aid of historical and existing data.
+
+## Question 5:
+Predictive models are frequently used in machine learning, and they can usually be described as either mechanistic or empirically-driven. Answer the following questions.
+
+Define mechanistic. Define empirically-driven. How do these model types differ? How are they similar?
+
+Mechanistic Models use parametric function to study theories and give predicted outputs.
+
+Empirically-driven Models use Non-parametric functions, basing on large amount of observation values in real events to derive theory and then give predicted outputs.
+
+Differences: Mechanistic models use parametric function while Empirically-driven Models use Non-parametric functions
+
+Similarities: Both models give predicted outtputs. Also, both models can be led to over-fitted solutions.
+
+In general, is a mechanistic or empirically-driven model easier to understand? Explain your choice.
+ 
+Empirically-driven Models are easier to understand. Because Non-parametric function are easier to implemente and also I appreciate the process of finding theories from real events data.
+
+Describe how the bias-variance tradeoff is related to the use of mechanistic or empirically-driven models.
+
+Empirically-driven Models has no parameters so it may have high bias and low variance.
+
+Mechanistic model has large number of parameters so it tends to have high variance and low bias.
+
+So we need to find the good balance between the two models without overfitting and underfitting the data using bias-variance tradeoff.
+
+## Question 6:
+
+A political candidate’s campaign has collected some detailed voter history data from their constituents. The campaign is interested in two questions:
+
+Given a voter’s profile/data, how likely is it that they will vote in favor of the candidate?
+
+This is predictive model. Because it tests theories about claims and state relationship between outcome & predictor(s). The existence of personal contact within candidates is consistent with relationship between outcome & predictor(s)
+How would a voter’s likelihood of support for the candidate change if they had personal contact with the candidate?
+
+Classify each question as either predictive or inferential. Explain your reasoning for each.
+
+
+## Exploratory Data Analysis
+Exercise 1: We are interested in highway miles per gallon, or the hwy variable. Create a histogram of this variable. Describe what you see/learn.
+
+```{r}
+library(ggplot2)
+hwy_hist<-ggplot(mpg,aes(x=hwy))+geom_histogram(binwidth = 0.5)
+hwy_hist
+```
+
+The histogram has a bi-modal distribution (double peaks)
+
+Exercise 2: Create a scatterplot. Put hwy on the x-axis and cty on the y-axis. Describe what you notice. Is there a relationship between hwy and cty? What does this mean?
+```{r}
+ggplot(mpg,aes(x=hwy,y=cty))+geom_point()
+```
+
+From the scatter plot, as hwy increases, so does cty, and there do not appear to be any outliers in the data. This scatterplot demonstrates a strong, positive, linear relationship between hwy and cty. This indicates that when the value of hwy increases by one unit, the value of cty also increases, but not by one unit. The same holds true for the scenario of a decrease.
+
+Exercise 3: Make a bar plot of . Flip it so that the manufacturers are on the y-axis. Order the bars by height. Which manufacturer produced the most cars? Which produced the least?
+```{r}
+ggplot(mpg,aes(y=reorder(manufacturer,manufacturer,function(y)-length(y))))+geom_bar()
+```
+
+From the bar plot, we get the lincoln produced the least cars, and the dodge produced the most cars.
+
+Exercise 4:
+Make a box plot of hwy, grouped by cyl. Do you see a pattern? If so, what?
+```{r}
+#loading the library tidyverse
+library(tidyverse)
+#loading the library ggplot2
+library(ggplot2)
+#loading the data mpg
+data(mpg)
+#making a boxplot for hwy group by cyl
+boxplot(hwy ~ cyl, data = mpg,col = c("red", "green", "yellow","blue"))
+```
+
+From the above output, the following are interpreted,
+the cyl and the hwy have a negative correlation. If the value of the cyl is increased, hwy value is decreased. If the value of the cyl is decreases, hwy value is increased. This demonstrates that cars with fewer cylinders tend to have greater highway fuel efficiency than cars with more cylinders
+
+Exercise 5:
+Use the corrplot package to make a lower triangle correlation matrix of the mpg dataset. (Hint: You can find information on the package here.)
+Which variables are positively or negatively correlated with which others? Do these relationships make sense to you? Are there any that surprise you?
+
+```{r}
+#install.packages("corrplot")
+library(corrplot)
+mpg1<-cor(select_if(mpg,is.numeric))
+corrplot(mpg1,method='number',type='lower')
+```
+
+year is positively correlated with displ.
+year is positively correlated with displ.
+cyl is positively correlated with displ and year.
+cty is negatively correlated with displ, year and cyl.
+hwy is positively correlated with cty and negatively correlated with displ and cyl. 
+These relationships make sense. 
+Sadly, I wasn't surprised.
